@@ -114,8 +114,15 @@ class Comet:
         return cls(R=R, afrho1=afrho1, k=k)
 
     def _get_value(self, d, keys, unit):
+        v = None
         for k in keys[::-1]:
-            v = d.get(k)
+            try:
+                # this works with sbpy Ephem objects
+                v = d[k]
+                break
+            except KeyError:
+                pass
+
         if v is None:
             raise IndexError
         if u:
