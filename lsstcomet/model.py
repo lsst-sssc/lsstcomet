@@ -97,7 +97,7 @@ class Comet:
 
         """
 
-        R = H2R(Hv, mv_sun)
+        R = H2R(Hv, cls.mv_sun)
 
         if comet_class.lower() == 'short':
             k = -4

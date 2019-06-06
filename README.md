@@ -42,3 +42,16 @@ Use `sbpy`'s ephemeris object:
  22.13998723 22.2785389  22.40573971 22.5198483  22.62001806 22.70600969
  22.77775974 22.83560086]
 ```
+
+## Template comets for LSST MAF (Metric Analysis Framework).
+These templates need more consideration!
+
+``` python
+>>> from lsstcomet import Comet
+>>> jfc = Comet.from_Hv(18, 'short')  # short period
+>>> occ = Comet.from_Hv(18, 'oort')   # Oort cloud comet
+>>> mbc = Comet.from_Hv(18, 'short')  # main-belt comet
+>>> g = {'rh': 1.5, 'delta': 1.0, 'phase': 30}
+>>> print(jfc.mag(g, 'r'))
+19.094821264028777
+```
