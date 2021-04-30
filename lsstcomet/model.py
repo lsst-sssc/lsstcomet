@@ -94,7 +94,7 @@ class Comet:
 
     @classmethod
     def from_Hv(cls, Hv, comet_class):
-        """Initialize from H magnitude.
+        """Initialize from Hv magnitude.
 
         Parameters
         ----------
@@ -124,6 +124,26 @@ class Comet:
             raise ValueError('Invalid comet_class: {}'.format(comet_class))
 
         return cls(R=R, afrho1=afrho1, k=k)
+
+    @classmethod
+    def from_Hr(cls, Hr, comet_class):
+        """Initialize from Hr magnitude.
+
+        Parameters
+        ----------
+        Hr : float
+            Absolute magnitude of the nucleus in LSST r-band (AB mag).
+
+        comet_class : string
+            Name of the parameter set to use.
+                * 'short': Afrho1/R**2 = 100 cm/km2, k=-4
+                * 'oort': Afrho1/R**2 = 1000 cm/km2, k=-2
+                * 'mbc': Afrho1/R**2 = 4000 cm/km2, k=-6
+
+        """
+
+        Hv = Hr - cls.m_sun['r'] + cls.mv_sun
+        return cls.from_Hv(Hv, comet_class)
 
     def _get_value(self, d, keys, unit):
         v = None
