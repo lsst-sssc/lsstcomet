@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from glob import glob
 from setuptools import setup, find_packages
 
 if __name__ == "__main__":
@@ -9,7 +10,7 @@ if __name__ == "__main__":
           author_email="msk@astro.umd.edu",
           url="https://github.com/lsst-sssc/lsstcomet",
           packages=find_packages(),
-          package_data={'lsstcomet': 'tests/*.dat'},
+          package_data={'lsstcomet': glob('tests/*.dat')},
           requires=['numpy'],
           setup_requires=['pytest-runner'],
           tests_require=['pytest', 'astropy', 'sbpy', 'synphot'],
