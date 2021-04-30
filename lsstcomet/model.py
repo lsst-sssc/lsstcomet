@@ -4,6 +4,7 @@ __all__ = [
 ]
 
 import numpy as np
+from numpy.core.numeric import moveaxis
 
 try:
     import astropy.units as u
@@ -25,8 +26,9 @@ class Comet:
 
     Parameters
     ----------
-    Hv or R : float
-        Absolute magnitude or radius (km) of the nucleus.
+    Hv, Hr, or R : float
+        Absolute magnitude in V-band (Vega mag), LSST r-band (AB mag),
+        or the radius (km) of the nucleus.
 
     afrho1 or afrho_q: float
         Comet coma quantity Afρ at 1 au (``afrho1``) or at perihelion
@@ -61,11 +63,21 @@ class Comet:
     }
 
     def __init__(self, **kwargs):
-        self.Hv = kwargs.get(
-            'Hv', R2H(kwargs.get('R', 1.0), self.mv_sun))
+        if sum(('Hv' in kwargs, 'Hr' in kwargs, 'R' in kwargs)) > 1:
+            raise ValueError('Only one of Hv, Hr, or R allowed.')
 
-        self.R = kwargs.get(
-            'R', H2R(kwargs.get('Hv', self.Hv), self.mv_sun))
+        if 'Hv' in kwargs:
+            self.Hv = kwargs['Hv']
+            self.Hr = self.Hv - self.mv_sun + self.m_sun['r']
+            self.R = H2R(self.Hv, self.mv_sun)
+        elif 'Hr' in kwargs:
+            self.Hr = kwargs['Hr']
+            self.Hv = self.Hr - self.m_sun['r'] + self.mv_sun
+            self.R = H2R(self.Hr, self.m_sun['r'])
+        else:
+            self.R = kwargs.get('R', 1.0)
+            self.Hr = R2H(self.R, self.m_sun['r'])
+            self.Hv = R2H(self.R, self.mv_sun)
 
         self.k = kwargs.get('k', -2)
 

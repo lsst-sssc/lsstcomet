@@ -32,6 +32,11 @@ class TestComet:
         comet = Comet(R=0.835, afrho1=100, k=-2)
         assert np.isclose(comet.Hv, 18, atol=0.002)
 
-    def test_init_H(self):
+    def test_init_Hv(self):
         comet = Comet(Hv=18, afrho1=100, k=-2)
         assert np.isclose(comet.R, 0.835, atol=0.001)
+
+    def test_init_Hr(self):
+        comet = Comet(Hr=17.83, afrho1=1000, k=-2)
+        assert np.isclose(comet.R, 0.835, atol=0.001)
+        assert np.isclose(comet.Hv, 18.00)
